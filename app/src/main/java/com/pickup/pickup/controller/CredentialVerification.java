@@ -27,7 +27,7 @@ public class CredentialVerification {
 
         message = (!length) ? "Password is too short" : null;
         message = (!hasUppercase) ? "Password does not contain an uppercase" : null;
-        message = (!hasLowercase) ? "Password does not contain an owercase" : null;
+        message = (!hasLowercase) ? "Password does not contain a lowercase" : null;
         message = (!hasNumber) ? "Password does not contain a number" : null;
 
 
