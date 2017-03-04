@@ -7,14 +7,14 @@ package com.pickup.pickup.model;
 public class User {
 
     // implement user image
-    private String username;
+    private String displayName;
     private String firstName;
     private String lastName;
     private String[] favEvents;
     private String userType;
 
     public User(String user, String first, String last, String[] fav, String type) {
-        username = user;
+        displayName = user;
         firstName = first;
         lastName = last;
         favEvents = fav;
@@ -22,11 +22,11 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return displayName;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.displayName = username;
     }
 
     public String getFirstName() {
