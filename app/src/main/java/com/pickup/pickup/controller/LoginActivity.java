@@ -15,11 +15,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pickup.pickup.R;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     // declare UI components
     private EditText editTextEmail;
@@ -96,9 +99,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d("Pickup", "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                DatabaseReference myRef = database.getReference(user.getUid());
+                                myRef.setValue(user.getEmail());
+                            }
+                        }
                         if (!task.isSuccessful()) {
                             Toast.makeText(getBaseContext(), "Authentication failed",
                                     Toast.LENGTH_SHORT).show();
