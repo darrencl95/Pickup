@@ -26,9 +26,9 @@ public class CredentialVerification {
         boolean hasNumber = password.matches(".*\\d+.*");
 
         message += (!length) ? "Password is too short" : "";
-        message += (!hasUppercase) ? "Password does not contain an uppercase" : "";
-        message += (!hasLowercase) ? "Password does not contain a lowercase" : "";
-        message += (!hasNumber) ? "Password does not contain a number" : "";
+        message += (!hasUppercase) ? "\nPassword does not contain an uppercase" : "";
+        message += (!hasLowercase) ? "\nPassword does not contain a lowercase" : "";
+        message += (!hasNumber) ? "\nPassword does not contain a number" : "";
 
         return message;
     }

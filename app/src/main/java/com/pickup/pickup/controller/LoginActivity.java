@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 String message = CredentialVerification.verifyPassword(password);
-                if (message == "") {
+                if (!message.isEmpty()) {
                     Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
                     return;
                 }
