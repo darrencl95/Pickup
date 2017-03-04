@@ -1,4 +1,4 @@
-package com.pickup.pickup;
+package com.pickup.pickup.controller;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.pickup.pickup.R;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
