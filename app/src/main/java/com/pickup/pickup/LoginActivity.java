@@ -56,14 +56,18 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String email = editTextEmail.getText().toString();
+                String password = editTextPassword.getText().toString();
+                signIn(email, password);
             }
         });
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String email = editTextEmail.getText().toString();
+                String password = editTextPassword.getText().toString();
+                createAccount(email, password);
             }
         });
 
