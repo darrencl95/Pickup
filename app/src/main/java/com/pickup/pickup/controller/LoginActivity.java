@@ -1,5 +1,9 @@
 package com.pickup.pickup.controller;
 
+/**
+ * Created by darrenleung on 3/4/17.
+ */
+
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -71,6 +75,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String email = editTextEmail.getText().toString();
+                if (!CredentialVerification.verifyEmail(email)) {
+                    Toast.makeText(getBaseContext(), "Invalid Email",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String password = editTextPassword.getText().toString();
                 createAccount(email, password);
             }
