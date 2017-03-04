@@ -105,8 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                                 DatabaseReference myRef = database.getReference(user.getUid());
                                 myRef.setValue(user.getEmail());
                             }
-                        }
-                        if (!task.isSuccessful()) {
+                            Toast.makeText(getBaseContext(), "Authentication succeeded",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
                             Toast.makeText(getBaseContext(), "Authentication failed",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -126,7 +127,10 @@ public class LoginActivity extends AppCompatActivity {
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getBaseContext(), "Authentication succeeded",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
                             Log.w("Pickup", "signInWithEmail:failed", task.getException());
                             Toast.makeText(getBaseContext(), "Authentication failed",
                                     Toast.LENGTH_SHORT).show();
