@@ -22,6 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pickup.pickup.R;
+import com.pickup.pickup.model.User;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -117,11 +121,13 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user != null) {
                                 DatabaseReference myRef = database.getReference(user.getUid());
-                                myRef.setValue(user.getEmail());
+                                User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
+                                myRef.setValue(u);
                             }
                             Toast.makeText(getBaseContext(), "Authentication succeeded",
                                     Toast.LENGTH_SHORT).show();
                         } else {
+                            Log.d("Firebase",task.getException().getMessage().toString());
                             Toast.makeText(getBaseContext(), "Authentication failed",
                                     Toast.LENGTH_SHORT).show();
                         }

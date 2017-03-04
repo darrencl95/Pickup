@@ -1,5 +1,7 @@
 package com.pickup.pickup.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by zachschlesinger on 3/4/17.
  */
@@ -10,15 +12,15 @@ public class User {
     private String displayName;
     private String firstName;
     private String lastName;
-    private String[] favEvents;
+    private ArrayList<String> favEvents;
     private String userType;
 
-    public User(String user, String first, String last, String[] fav, String type) {
+    public User(String user, String first, String last, ArrayList<String> fav) {
         displayName = user;
         firstName = first;
         lastName = last;
         favEvents = fav;
-        userType = type;
+        userType = "user";
     }
 
     public String getUsername() {
@@ -45,11 +47,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String[] getFavEvents() {
+    public ArrayList<String> getFavEvents() {
         return favEvents;
     }
 
-    public void setFavEvents(String[] favEvents) {
+    public void setFavEvents(ArrayList<String> favEvents) {
         this.favEvents = favEvents;
     }
 
