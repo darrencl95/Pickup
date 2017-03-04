@@ -24,20 +24,21 @@ public class LoginActivity extends AppCompatActivity {
     // declare UI components
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private Button buttonLogin;
-    private Button buttonRegister;
+    private Button loginBtn;
+    private Button registerBtn;
     private TextView textViewForgot;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
-        buttonRegister = (Button) findViewById(R.id.registerButton);
+        loginBtn = (Button) findViewById(R.id.buttonLogin);
+        registerBtn = (Button) findViewById(R.id.registerButton);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -52,9 +53,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
-        setContentView(R.layout.activity_login);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = editTextEmail.getText().toString();
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = editTextEmail.getText().toString();
