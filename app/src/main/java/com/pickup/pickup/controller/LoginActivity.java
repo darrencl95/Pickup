@@ -75,12 +75,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String email = editTextEmail.getText().toString();
+                String password = editTextPassword.getText().toString();
                 if (!CredentialVerification.verifyEmail(email)) {
                     Toast.makeText(getBaseContext(), "Invalid Email",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String password = editTextPassword.getText().toString();
+                String message = CredentialVerification.verifyPassword(password);
+                if (message == "") {
+                    Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 createAccount(email, password);
             }
         });
