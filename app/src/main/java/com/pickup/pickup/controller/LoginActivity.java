@@ -144,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(), "this didn't work", Toast.LENGTH_LONG).show();
                     }
                 });
+
     }
 
     private void createAccount(String email, String password) {
