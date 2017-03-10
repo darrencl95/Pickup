@@ -5,6 +5,8 @@ package com.pickup.pickup.controller;
  */
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -122,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setProfilePicture() {
-        Uri file = Uri.fromFile(new File("/Downloads/profile-icon.png"));
+        Uri file = Uri.fromFile(new File("/drawables/profile-icon.png"));
         StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
 
         riversRef.putFile(file)
