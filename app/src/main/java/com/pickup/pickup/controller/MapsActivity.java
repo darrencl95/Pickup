@@ -25,9 +25,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pickup.pickup.R;
+
+import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -37,6 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Button locationBtn;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference locations = database.getReference("Locations");
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
@@ -52,7 +59,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationBtn = (Button) findViewById(R.id.locationButton);
 
-        DatabaseReference root = database.getReference();
+        locations.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> coordinates = dataSnapshot.getChildren();
+                for (DataSnapshot o : coordinates) {
+                    mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(((double) o.child("Latitude").getValue()), ((double) o.child("Longitude").getValue()))));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -62,7 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference myRef = database.getReference().child("Locations").push();
+                DatabaseReference myRef = locations.push();
                 myRef.child("Latitude").setValue(mLastLocation.getLatitude());
                 myRef.child("Longitude").setValue(mLastLocation.getLongitude());
             }
