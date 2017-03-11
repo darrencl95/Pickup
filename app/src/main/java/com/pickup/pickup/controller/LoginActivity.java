@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 createAccount(email, password);
-                setProfilePicture();
+                startActivity(new Intent(LoginActivity.this, GalleryActivity.class));
             }
         });
 
