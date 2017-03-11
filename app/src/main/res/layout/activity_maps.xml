@@ -16,7 +16,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.pickup.pickup.controller.MapsActivity" />
+        tools:context="com.pickup.pickup.controller.MainActivity" />
 
     <Button
         android:id="@+id/locationButton"
