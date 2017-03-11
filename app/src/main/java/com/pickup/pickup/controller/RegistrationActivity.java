@@ -85,7 +85,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     return;
                 }
                 createAccount(email, password);
-                startActivity(new Intent(RegistrationActivity.this, MapsActivity.class));
+                signIn(email,password);
             }
         });
 
@@ -123,6 +123,31 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d("Firebase",task.getException().getMessage().toString());
+                            Toast.makeText(getBaseContext(), "Authentication failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void signIn(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("Pickup", "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getBaseContext(), "Authentication succeeded",
+                                    Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RegistrationActivity.this, MapsActivity.class));
+                        } else {
+                            Log.w("Pickup", "signInWithEmail:failed", task.getException());
                             Toast.makeText(getBaseContext(), "Authentication failed",
                                     Toast.LENGTH_SHORT).show();
                         }

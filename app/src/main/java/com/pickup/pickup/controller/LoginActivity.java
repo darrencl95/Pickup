@@ -52,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView registerBtn;
     private TextView textViewForgot;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
