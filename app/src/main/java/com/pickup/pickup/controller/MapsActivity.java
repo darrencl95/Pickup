@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference myRef = database.getReference().push();
+                DatabaseReference myRef = database.getReference().child("Locations").push();
                 myRef.setValue(mLastLocation);
             }
         });
