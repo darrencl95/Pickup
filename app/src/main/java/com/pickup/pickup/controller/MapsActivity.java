@@ -1,7 +1,6 @@
 package com.pickup.pickup.controller;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -64,7 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 DatabaseReference myRef = database.getReference().child("Locations").push();
-                myRef.setValue(mLastLocation);
+                myRef.child("Latitude").setValue(mLastLocation.getLatitude());
+                myRef.child("Longitude").setValue(mLastLocation.getLongitude());
             }
         });
     }
