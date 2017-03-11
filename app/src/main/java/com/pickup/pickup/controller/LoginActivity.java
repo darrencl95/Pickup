@@ -33,6 +33,8 @@ import com.google.firebase.storage.UploadTask;
 import com.pickup.pickup.R;
 import com.pickup.pickup.model.User;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,14 +43,15 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private StorageReference mStorageRef;
 
     // declare UI components
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button loginBtn;
-    private Button registerBtn;
+    private TextView registerBtn;
     private TextView textViewForgot;
-    private StorageReference mStorageRef;
+
 
 
     @Override
@@ -61,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         loginBtn = (Button) findViewById(R.id.buttonLogin);
-        registerBtn = (Button) findViewById(R.id.registerButton);
+        registerBtn = (TextView) findViewById(R.id.registerButton);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -90,20 +93,20 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = editTextEmail.getText().toString();
-                String password = editTextPassword.getText().toString();
-                if (!CredentialVerification.verifyEmail(email)) {
-                    Toast.makeText(getBaseContext(), "Invalid Email",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String message = CredentialVerification.verifyPassword(password);
-                if (!message.isEmpty()) {
-                    Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                createAccount(email, password);
-                startActivity(new Intent(LoginActivity.this, GalleryActivity.class));
+//                String email = editTextEmail.getText().toString();
+//                String password = editTextPassword.getText().toString();
+//                if (!CredentialVerification.verifyEmail(email)) {
+//                    Toast.makeText(getBaseContext(), "Invalid Email",
+//                            Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                String message = CredentialVerification.verifyPassword(password);
+//                if (!message.isEmpty()) {
+//                    Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                createAccount(email, password);
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
             }
         });
 
@@ -123,56 +126,32 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void setProfilePicture() {
-        Uri file = Uri.fromFile(new File("/drawables/profile-icon.png"));
-        StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
-
-        riversRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        // Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Toast.makeText(getBaseContext(), "this worked", Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                        Toast.makeText(getBaseContext(), "this didn't work", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-    }
-
-    private void createAccount(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Pickup", "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            if (user != null) {
-                                DatabaseReference myRef = database.getReference(user.getUid());
-                                User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
-                                myRef.setValue(u);
-                            }
-                            Toast.makeText(getBaseContext(), "Authentication succeeded",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("Firebase",task.getException().getMessage().toString());
-                            Toast.makeText(getBaseContext(), "Authentication failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });
-    }
+//    private void createAccount(String email, String password) {
+//        mAuth.createUserWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        Log.d("Pickup", "createUserWithEmail:onComplete:" + task.isSuccessful());
+//
+//                        if (task.isSuccessful()) {
+//                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                            if (user != null) {
+//                                DatabaseReference myRef = database.getReference(user.getUid());
+//                                User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
+//                                myRef.setValue(u);
+//                            }
+//                            Toast.makeText(getBaseContext(), "Authentication succeeded",
+//                                    Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Log.d("Firebase",task.getException().getMessage().toString());
+//                            Toast.makeText(getBaseContext(), "Authentication failed",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        // ...
+//                    }
+//                });
+//    }
 
     private void signIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
