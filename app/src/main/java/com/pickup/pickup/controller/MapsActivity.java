@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.Button;
@@ -62,10 +63,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> coordinates = dataSnapshot.getChildren();
-                for (DataSnapshot o : coordinates) {
-                    mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(((double) o.child("Latitude").getValue()), ((double) o.child("Longitude").getValue()))));
+                for (DataSnapshot o : dataSnapshot.getChildren()) {
+                    Double lat = (Double) o.child("Latitude").getValue();
+                    Double lon = (Double) o.child("Longitude").getValue();
+                    if (lat != null && lon != null) {
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng((Double) o.child("Latitude").getValue(), (Double) o.child("Longitude").getValue())));
+                    }
                 }
             }
 
@@ -156,13 +160,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mCurrLocationMarker.remove();
         }
 
-        //Place current location marker
+//        //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        markerOptions.position(latLng);
+//        markerOptions.title("Current Position");
+//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//        mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
