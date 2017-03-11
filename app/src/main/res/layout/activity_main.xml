@@ -1,51 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <HorizontalScrollView
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.pickup.pickup.controller.NavigationActivity"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Profile"
-                android:textAlignment="center" />
-
-            <Button
-                android:id="@+id/buttonFriends"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Friends"
-                android:textAlignment="center" />
-
-            <Button
-                android:id="@+id/buttonCurrent"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Current Events"
-                android:textAlignment="center" />
-
-            <Button
-                android:id="@+id/buttonPast"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Past Events"
-                android:textAlignment="center" />
-
-            <Button
-                android:id="@+id/buttonSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Settings"
-                android:textAlignment="center" />
-        </LinearLayout>
-    </HorizontalScrollView>
+        android:layout_height="wrap_content"
+        tools:layout="@layout/navigation_view" />
 </LinearLayout>
