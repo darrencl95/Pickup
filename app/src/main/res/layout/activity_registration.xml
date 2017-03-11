@@ -29,9 +29,16 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/editTextDisplayName"
+        android:hint="Enter your display name"
+        android:layout_below="@+id/editTextPassword"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/editTextFirst"
         android:hint="Enter your first name"
-        android:layout_below="@id/editTextPassword"
+        android:layout_below="@id/editTextDisplayName"
         />
 
     <EditText

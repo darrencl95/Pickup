@@ -42,7 +42,6 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private StorageReference mStorageRef;
 
     // declare UI components
@@ -91,19 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String email = editTextEmail.getText().toString();
-//                String password = editTextPassword.getText().toString();
-//                if (!CredentialVerification.verifyEmail(email)) {
-//                    Toast.makeText(getBaseContext(), "Invalid Email",
-//                            Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                String message = CredentialVerification.verifyPassword(password);
-//                if (!message.isEmpty()) {
-//                    Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                createAccount(email, password);
                 startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
             }
         });
@@ -123,33 +109,6 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-//    private void createAccount(String email, String password) {
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        Log.d("Pickup", "createUserWithEmail:onComplete:" + task.isSuccessful());
-//
-//                        if (task.isSuccessful()) {
-//                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                            if (user != null) {
-//                                DatabaseReference myRef = database.getReference(user.getUid());
-//                                User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
-//                                myRef.setValue(u);
-//                            }
-//                            Toast.makeText(getBaseContext(), "Authentication succeeded",
-//                                    Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Log.d("Firebase",task.getException().getMessage().toString());
-//                            Toast.makeText(getBaseContext(), "Authentication failed",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        // ...
-//                    }
-//                });
-//    }
 
     private void signIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)

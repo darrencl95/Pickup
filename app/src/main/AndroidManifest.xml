@@ -50,6 +50,7 @@
         <activity android:name=".controller.GalleryActivity"
             android:label="GalleryActivity"></activity>
         <activity android:name=".controller.RegistrationActivity" />
+        <activity android:name=".controller.MainActivity" />
     </application>
 
 </manifest>

@@ -38,6 +38,7 @@ public class RegistrationActivity extends AppCompatActivity {
     // declare UI components
     private EditText editTextEmail;
     private EditText editTextPassword;
+    private EditText editTextDisplayName;
     private EditText editTextFirst;
     private EditText editTextLast;
     private Button registerBtn;
@@ -49,6 +50,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        editTextDisplayName = (EditText) findViewById(R.id.editTextDisplayName);
         editTextFirst = (EditText) findViewById(R.id.editTextFirst);
         editTextLast = (EditText) findViewById(R.id.editTextLast);
         registerBtn = (Button) findViewById(R.id.registerButton);
@@ -116,7 +118,8 @@ public class RegistrationActivity extends AppCompatActivity {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user != null) {
                                 DatabaseReference myRef = database.getReference(user.getUid());
-                                User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
+                                //User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
+                                User u = new User(editTextDisplayName.getText().toString(), editTextFirst.getText().toString(), editTextLast.getText().toString(), null);
                                 myRef.setValue(u);
                             }
                             Toast.makeText(getBaseContext(), "Authentication succeeded",
@@ -145,7 +148,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(getBaseContext(), "Authentication succeeded",
                                     Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegistrationActivity.this, MapsActivity.class));
+                            startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
                         } else {
                             Log.w("Pickup", "signInWithEmail:failed", task.getException());
                             Toast.makeText(getBaseContext(), "Authentication failed",
