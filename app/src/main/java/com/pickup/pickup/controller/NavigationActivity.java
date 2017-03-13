@@ -1,5 +1,6 @@
 package com.pickup.pickup.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class NavigationActivity extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.buttonProfile:
+                    startActivity(new Intent(getActivity(), ProfileActivity.class));
                     Toast.makeText(getActivity(), "Profile button pressed", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.buttonFriends:
