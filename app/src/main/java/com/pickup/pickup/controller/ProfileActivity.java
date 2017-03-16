@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -25,6 +30,10 @@ import com.pickup.pickup.R;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by zachschlesinger on 3/13/17.
@@ -35,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileImage;
     private StorageReference mStorageRef;
     private FirebaseUser firebaseUser;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
     @Override
@@ -44,29 +54,47 @@ public class ProfileActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         profileImage = (ImageView) findViewById(R.id.imageView);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference userProf = mStorageRef.child(firebaseUser.getUid());
-        try {
-            final File localFile = File.createTempFile(firebaseUser.getUid().toString(), "png");
-            userProf.getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Log.d("firebase_file_path", localFile.getAbsolutePath());
-                            Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                            profileImage.setImageBitmap(bmp);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            profileImage.setImageResource(R.drawable.default_profile);
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        DatabaseReference myRef = database.getReference(firebaseUser.getUid());
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        DatabaseReference userProfRef = myRef.child("profile_img");
+        StorageReference userProf = mStorageRef.child(firebaseUser.getUid());
+        updateImg();
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                updateImg();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getBaseContext(), "Database error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        try {
+//            final File localFile = File.createTempFile(firebaseUser.getUid().toString(), "png");
+//            userProf.getFile(localFile)
+//                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                            Log.d("firebase_file_path", localFile.getAbsolutePath());
+//                            Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                            profileImage.setImageBitmap(bmp);
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            profileImage.setImageResource(R.drawable.default_profile);
+//                        }
+//                    });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
 //        StorageReference defaultRef = mStorageRef.child("default/default.png");
 //        Uri path = Uri.parse("android.resource://com.pickup.pickup/" + R.drawable.default_profile);
 //        defaultRef.putFile(path)
@@ -118,6 +146,10 @@ public class ProfileActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
+                                DatabaseReference myRef = database.getReference(firebaseUser.getUid());
+                                @SuppressWarnings("VisibleForTests")
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                myRef.child("profile_img").setValue(downloadUrl.toString());
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -133,4 +165,46 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void updateImg() {
+        StorageReference userProf = mStorageRef.child(firebaseUser.getUid());
+        try {
+            final File localFile = File.createTempFile(firebaseUser.getUid().toString(), "png");
+            userProf.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Log.d("firebase_file_path", localFile.getAbsolutePath());
+                            Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            profileImage.setImageBitmap(bmp);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            profileImage.setImageResource(R.drawable.default_profile);
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StorageReference defaultRef = mStorageRef.child("default/default.png");
+        Uri path = Uri.parse("android.resource://com.pickup.pickup/" + R.drawable.default_profile);
+        defaultRef.putFile(path)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("FIREBASE_STORAGE", e.getMessage().toString());
+                        Toast.makeText(getBaseContext(), "this didn't work", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 }
