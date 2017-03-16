@@ -47,8 +47,6 @@
         <activity
             android:name=".controller.MainActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".controller.GalleryActivity"
-            android:label="GalleryActivity"></activity>
         <activity android:name=".controller.RegistrationActivity" />
         <activity android:name=".controller.ProfileActivity" />
     </application>
