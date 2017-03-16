@@ -30,10 +30,6 @@ import com.pickup.pickup.R;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by zachschlesinger on 3/13/17.
@@ -41,7 +37,10 @@ import java.net.URL;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    // declare UI components
     private ImageView profileImage;
+
+    // declare firebase components
     private StorageReference mStorageRef;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -52,15 +51,18 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // initialize UI components
         profileImage = (ImageView) findViewById(R.id.imageView);
-        DatabaseReference myRef = database.getReference(firebaseUser.getUid());
 
+        // initialize firebase components
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference myRef = database.getReference(firebaseUser.getUid());
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        DatabaseReference userProfRef = myRef.child("profile_img");
-        StorageReference userProf = mStorageRef.child(firebaseUser.getUid());
+
+        // start off by updating the image based on firebase storage
         updateImg();
 
+        // listener to see if a new profile picture is chosen
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,44 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-//        try {
-//            final File localFile = File.createTempFile(firebaseUser.getUid().toString(), "png");
-//            userProf.getFile(localFile)
-//                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//                            Log.d("firebase_file_path", localFile.getAbsolutePath());
-//                            Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                            profileImage.setImageBitmap(bmp);
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            profileImage.setImageResource(R.drawable.default_profile);
-//                        }
-//                    });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        StorageReference defaultRef = mStorageRef.child("default/default.png");
-//        Uri path = Uri.parse("android.resource://com.pickup.pickup/" + R.drawable.default_profile);
-//        defaultRef.putFile(path)
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.e("FIREBASE_STORAGE", e.getMessage().toString());
-//                        Toast.makeText(getBaseContext(), "this didn't work", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
+        // opens gallery if profile image is long clicked
         profileImage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -121,11 +86,22 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * used for opening pre-defined intent
+     */
     private void imageOnClick() {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 0);
     }
+
+
+    /**
+     * allows user to pick an image from the gallery and then stores that in firebase storage
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -133,13 +109,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK){
             Uri targetUri = data.getData();
-//            textTargetUri.setText(targetUri.toString());
-//            StorageReference darrenProf = mStorageRef.child("darrenProfilePicture/profile.jpg");
 
             Bitmap bitmap;
             try {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-//                profileImage.setImageBitmap(bitmap);
                 StorageReference userProf = mStorageRef.child(firebaseUser.getUid());
                 userProf.putFile(targetUri)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -160,12 +133,14 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         });
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * updates the profile picture from firebase storage
+     */
     private void updateImg() {
         StorageReference userProf = mStorageRef.child(firebaseUser.getUid());
         try {
