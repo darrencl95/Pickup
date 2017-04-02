@@ -49,6 +49,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+    Marker requestMarker;
     LocationRequest mLocationRequest;
 
     @Override
@@ -89,9 +90,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference myRef = locations.push();
-                myRef.child("Latitude").setValue(mLastLocation.getLatitude());
-                myRef.child("Longitude").setValue(mLastLocation.getLongitude());
+                if (requestMarker != null) {
+                    DatabaseReference myRef = locations.push();
+                    myRef.child("Latitude").setValue(requestMarker.getPosition().latitude);
+                    myRef.child("Longitude").setValue(requestMarker.getPosition().longitude);
+                    requestMarker.remove();
+                }
             }
         });
 
@@ -134,10 +138,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng point) {
-                mMap.addMarker(new MarkerOptions()
+                if (requestMarker != null) {
+                    requestMarker.remove();
+                }
+                requestMarker = mMap.addMarker(new MarkerOptions()
                     .position(point)
                     .title("Test")
-                    .draggable(true));
+                    .draggable(true)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+            }
+        });
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                requestMarker = marker;
             }
         });
 
