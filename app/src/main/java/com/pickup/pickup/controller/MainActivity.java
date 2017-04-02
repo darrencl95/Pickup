@@ -43,6 +43,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Button locationBtn;
+    private Button clearBtn;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference locations = database.getReference("Locations");
     GoogleApiClient mGoogleApiClient;
@@ -59,6 +60,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         locationBtn = (Button) findViewById(R.id.locationButton);
+        clearBtn = (Button) findViewById(R.id.clearButton);
 
         locations.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,6 +94,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 myRef.child("Longitude").setValue(mLastLocation.getLongitude());
             }
         });
+
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                locations.removeValue();
+            }
+        });
     }
 
     /**
@@ -121,6 +130,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng point) {
+                mMap.addMarker(new MarkerOptions()
+                    .position(point)
+                    .title("Test")
+                    .draggable(true));
+            }
+        });
+
     }
 
     protected synchronized void buildGoogleApiClient() {
