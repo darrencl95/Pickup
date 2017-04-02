@@ -31,14 +31,21 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_weight="1"
-            android:text="Store Location" />
+            android:text="Store" />
 
         <Button
             android:id="@+id/clearButton"
-            android:layout_width="140dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:layout_weight="1.70" />
+
+        <Button
+            android:id="@+id/showRequestsButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Clear markers" />
+            android:text="Show Requests" />
     </LinearLayout>
 
 </LinearLayout>

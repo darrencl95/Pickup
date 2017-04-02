@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pickup.pickup.R;
 
@@ -44,6 +45,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Button locationBtn;
     private Button clearBtn;
+    private Button showRequestsBtn;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference locations = database.getReference("Locations");
     GoogleApiClient mGoogleApiClient;
@@ -62,14 +64,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationBtn = (Button) findViewById(R.id.locationButton);
         clearBtn = (Button) findViewById(R.id.clearButton);
+        showRequestsBtn = (Button) findViewById(R.id.showRequestsButton);
 
         locations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for (DataSnapshot o : dataSnapshot.getChildren()) {
                     Double lat = (Double) o.child("Latitude").getValue();
                     Double lon = (Double) o.child("Longitude").getValue();
-                    if (lat != null && lon != null) {
+                    Boolean approved = (Boolean) o.child("Approved").getValue();
+                    if (lat != null && lon != null && approved != null && approved) {
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng((Double) o.child("Latitude").getValue(), (Double) o.child("Longitude").getValue())));
                     }
@@ -94,6 +99,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     DatabaseReference myRef = locations.push();
                     myRef.child("Latitude").setValue(requestMarker.getPosition().latitude);
                     myRef.child("Longitude").setValue(requestMarker.getPosition().longitude);
+                    myRef.child("Approved").setValue(false);
                     requestMarker.remove();
                 }
             }
@@ -105,6 +111,34 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 locations.removeValue();
             }
         });
+
+        showRequestsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locations.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot o : dataSnapshot.getChildren()) {
+                            Double lat = (Double) o.child("Latitude").getValue();
+                            Double lon = (Double) o.child("Longitude").getValue();
+                            Boolean approved = (Boolean) o.child("Approved").getValue();
+                            if (lat != null && lon != null && approved != null && !approved) {
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng((Double) o.child("Latitude").getValue(), (Double) o.child("Longitude").getValue()))
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
+
     }
 
     /**
