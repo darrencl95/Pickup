@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     // declare UI components
     private ImageView profileImage;
+    private Button profileBtn;
 
     // declare firebase components
     private StorageReference mStorageRef;
@@ -53,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // initialize UI components
         profileImage = (ImageView) findViewById(R.id.imageView);
+        profileBtn = (Button) findViewById(R.id.buttonProfile);
 
         // initialize firebase components
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -67,7 +70,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 updateImg();
-
             }
 
             @Override
@@ -82,6 +84,13 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onLongClick(View view) {
                 imageOnClick();
                 return true;
+            }
+        });
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(), "But you're already here", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -118,7 +127,7 @@ public class ProfileActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
                                 DatabaseReference myRef = database.getReference(firebaseUser.getUid());
                                 @SuppressWarnings("VisibleForTests")
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
@@ -149,6 +158,7 @@ public class ProfileActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                            Toast.makeText(getBaseContext(), "updateImg() success", Toast.LENGTH_SHORT).show();
                             Log.d("firebase_file_path", localFile.getAbsolutePath());
                             Bitmap bmp = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                             profileImage.setImageBitmap(bmp);
@@ -157,6 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getBaseContext(), "updateImg() failure", Toast.LENGTH_SHORT).show();
                             profileImage.setImageResource(R.drawable.default_profile);
                         }
                     });
@@ -170,7 +181,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

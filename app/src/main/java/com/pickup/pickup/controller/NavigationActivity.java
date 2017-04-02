@@ -43,8 +43,6 @@ public class NavigationActivity extends Fragment {
         buttonCurrent.setOnClickListener(clickListener);
         buttonPast.setOnClickListener(clickListener);
         buttonSettings.setOnClickListener(clickListener);
-
-
         return rootView;
     }
 
