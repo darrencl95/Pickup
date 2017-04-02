@@ -51,18 +51,27 @@ public class NavigationActivity extends Fragment {
             switch (v.getId()) {
                 case R.id.buttonProfile:
                     startActivity(new Intent(getActivity(), ProfileActivity.class));
+                    killPreviousActivity();
                     Toast.makeText(getActivity(), "Profile button pressed", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.buttonFriends:
+                    startActivity(new Intent(getActivity(), FriendsActivity.class));
+                    killPreviousActivity();
                     Toast.makeText(getActivity(), "Friends button pressed", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.buttonCurrent:
+                    startActivity(new Intent(getActivity(), CurrentActivity.class));
+                    killPreviousActivity();
                     Toast.makeText(getActivity(), "Current button pressed", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.buttonPast:
+                    startActivity(new Intent(getActivity(), HistoryActivity.class));
+                    killPreviousActivity();
                     Toast.makeText(getActivity(), "Past button pressed", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.buttonSettings:
+                    startActivity(new Intent(getActivity(), SettingsActivity.class));
+                    killPreviousActivity();
                     Toast.makeText(getActivity(), "Settings button pressed", Toast.LENGTH_SHORT).show();
                     break;
                 default:
@@ -70,6 +79,12 @@ public class NavigationActivity extends Fragment {
             }
         }
     };
+
+    private void killPreviousActivity() {
+        if (!getActivity().getClass().getSimpleName().equals("MainActivity")) {
+            getActivity().finish();
+        }
+    }
 
 
 }

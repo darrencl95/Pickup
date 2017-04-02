@@ -49,6 +49,10 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".controller.RegistrationActivity" />
         <activity android:name=".controller.ProfileActivity" />
+        <activity android:name=".controller.FriendsActivity" />
+        <activity android:name=".controller.CurrentActivity" />
+        <activity android:name=".controller.HistoryActivity" />
+        <activity android:name=".controller.SettingsActivity" />
     </application>
 
 </manifest>
