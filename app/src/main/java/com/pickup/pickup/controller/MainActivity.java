@@ -180,6 +180,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     .title("Test")
                     .draggable(true)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                requestMarker.showInfoWindow();
             }
         });
 
@@ -197,6 +198,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 requestMarker = marker;
+                requestMarker.showInfoWindow();
             }
         });
 
