@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.pickup.pickup.R;
 
 public class NavigationActivity extends Fragment {
@@ -19,17 +21,23 @@ public class NavigationActivity extends Fragment {
     private Button buttonCurrent;
     private Button buttonPast;
     private Button buttonSettings;
+    private Button buttonLogout;
+
+    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mAuth = FirebaseAuth.getInstance();
+
         View rootView = inflater.inflate(R.layout.navigation_view, container, false);
         buttonProfile = (Button) rootView.findViewById(R.id.buttonProfile);
         buttonFriends = (Button) rootView.findViewById(R.id.buttonFriends);
         buttonCurrent = (Button) rootView.findViewById(R.id.buttonCurrent);
         buttonPast = (Button) rootView.findViewById(R.id.buttonPast);
         buttonSettings = (Button) rootView.findViewById(R.id.buttonSettings);
+        buttonLogout = (Button) rootView.findViewById(R.id.buttonLogout);
 
 //        buttonProfile.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -43,6 +51,7 @@ public class NavigationActivity extends Fragment {
         buttonCurrent.setOnClickListener(clickListener);
         buttonPast.setOnClickListener(clickListener);
         buttonSettings.setOnClickListener(clickListener);
+        buttonLogout.setOnClickListener(clickListener);
         return rootView;
     }
 
@@ -73,6 +82,12 @@ public class NavigationActivity extends Fragment {
                     startActivity(new Intent(getActivity(), SettingsActivity.class));
                     killPreviousActivity();
                     Toast.makeText(getActivity(), "Settings button pressed", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.buttonLogout:
+                    mAuth.signOut();
+                    Log.d("token", "onAuthStateChanged:signed_in:");
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    killPreviousActivity();
                     break;
                 default:
                     break;

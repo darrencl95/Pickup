@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // initialize firebase components
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference myRef = database.getReference(firebaseUser.getUid());
+        DatabaseReference myRef = database.getReference("Users/" + firebaseUser.getUid());
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         // start off by updating the image based on firebase storage
@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                                Toast.makeText(getBaseContext(), "this worked! :)", Toast.LENGTH_SHORT).show();
-                                DatabaseReference myRef = database.getReference(firebaseUser.getUid());
+                                DatabaseReference myRef = database.getReference("Users/" + firebaseUser.getUid());
                                 @SuppressWarnings("VisibleForTests")
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 myRef.child("profile_img").setValue(downloadUrl.toString());

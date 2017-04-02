@@ -117,7 +117,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user != null) {
-                                DatabaseReference myRef = database.getReference(user.getUid());
+                                DatabaseReference myRef = database.getReference("Users/" + user.getUid());
                                 //User u = new User("trollmaster6969","Alexandre","Locquet", new ArrayList<>(Arrays.asList("basketball", "baseball")));
                                 User u = new User(editTextDisplayName.getText().toString(), editTextFirst.getText().toString(), editTextLast.getText().toString(), null);
                                 myRef.setValue(u);
