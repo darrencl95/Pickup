@@ -53,6 +53,7 @@
         <activity android:name=".controller.CurrentActivity" />
         <activity android:name=".controller.HistoryActivity" />
         <activity android:name=".controller.SettingsActivity" />
+        <activity android:name=".controller.JoinActivity" />
     </application>
 
 </manifest>

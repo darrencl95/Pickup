@@ -22,6 +22,7 @@ public class NavigationActivity extends Fragment {
     private Button buttonPast;
     private Button buttonSettings;
     private Button buttonLogout;
+    private Button buttonJoin;
 
     private FirebaseAuth mAuth;
 
@@ -38,6 +39,7 @@ public class NavigationActivity extends Fragment {
         buttonPast = (Button) rootView.findViewById(R.id.buttonPast);
         buttonSettings = (Button) rootView.findViewById(R.id.buttonSettings);
         buttonLogout = (Button) rootView.findViewById(R.id.buttonLogout);
+        buttonJoin = (Button) rootView.findViewById(R.id.buttonJoin);
 
 //        buttonProfile.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -52,6 +54,7 @@ public class NavigationActivity extends Fragment {
         buttonPast.setOnClickListener(clickListener);
         buttonSettings.setOnClickListener(clickListener);
         buttonLogout.setOnClickListener(clickListener);
+        buttonJoin.setOnClickListener(clickListener);
         return rootView;
     }
 
@@ -85,8 +88,11 @@ public class NavigationActivity extends Fragment {
                     break;
                 case R.id.buttonLogout:
                     mAuth.signOut();
-                    Log.d("token", "onAuthStateChanged:signed_in:");
                     startActivity(new Intent(getActivity(), LoginActivity.class));
+                    killPreviousActivity();
+                    break;
+                case R.id.buttonJoin:
+                    startActivity(new Intent(getActivity(), JoinActivity.class));
                     killPreviousActivity();
                     break;
                 default:

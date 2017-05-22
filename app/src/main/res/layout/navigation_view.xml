@@ -54,6 +54,13 @@
                 android:text="Logout"
                 android:textAlignment="center" />
 
+            <Button
+                android:id="@+id/buttonJoin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Join"
+                android:textAlignment="center" />
+
         </LinearLayout>
     </HorizontalScrollView>
 </LinearLayout>
