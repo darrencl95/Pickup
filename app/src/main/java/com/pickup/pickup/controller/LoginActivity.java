@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     // declare UI components
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private Button loginBtn;
+    private TextView loginBtn;
     private TextView registerBtn;
     private TextView textViewForgot;
 
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        loginBtn = (Button) findViewById(R.id.buttonLogin);
+        loginBtn = (TextView) findViewById(R.id.buttonLogin);
         registerBtn = (TextView) findViewById(R.id.registerButton);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -69,7 +69,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
-                signIn(email, password);
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    signIn(email, password);
+                } else {
+                    Toast.makeText(getBaseContext(), "You must fill out the username and password", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
